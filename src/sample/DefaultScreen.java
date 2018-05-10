@@ -8,9 +8,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
@@ -27,13 +29,13 @@ public class DefaultScreen {
   @FXML
   private ScrollPane intermediatePointsPane;
   @FXML
-  private ScrollPane terrainMapView;
+  private StackPane terrainMapView;
   @FXML
   private TextField startingPoint;
   @FXML
   private TextField endingPoint;
   @FXML
-  private ToggleGroup optionCalculation = new ToggleGroup();
+  private ToggleGroup optionCalculation;
   @FXML
   private Label errorLabel;
   @FXML
@@ -42,6 +44,8 @@ public class DefaultScreen {
   private CheckBox obstacleCheckBox;
   @FXML
   private Button okButton;
+
+  private Pane pathPane;
 
 
   private int maxHeight;
@@ -92,11 +96,26 @@ public class DefaultScreen {
         }
         System.out.println("WIth Intermedia");
       }
-      for (Coordinate coordinate : path){
-        System.out.println(coordinate.toString());
+      if(!path.isEmpty()) {
+        printPath();
       }
     }
     System.out.println(optionID);
+  }
+
+  private void printPath(){
+    pathPane.getChildren().removeAll(pathPane.getChildren());
+    Coordinate start = path.poll();
+    int scaling = 31;
+    int padding = 13;
+    for (Coordinate point : path) {
+      Line line = new Line(padding+start.getXvalue()*scaling, padding+start.getYvalue()*scaling,
+          padding+point.getXvalue()*scaling, padding+point.getYvalue()*scaling);
+      line.setStrokeWidth(5);
+      line.setStroke(new Color(1.0,0.0,0.0,0.5));
+      start = point;
+      pathPane.getChildren().add(line);
+    }
   }
 
   public void setUpDefaultScreen(int height, int width){
@@ -115,6 +134,9 @@ public class DefaultScreen {
     primaryStage.setScene(new Scene(root, 800, 400));
     primaryStage.show();
     setUpDefaultTerrainMap(height,width);
+    pathPane = new Pane();
+    pathPane.setMouseTransparent(true);
+    terrainMapView.getChildren().add(pathPane);
   }
 
   private void setUpDefaultTerrainMap(int height, int width){
@@ -147,7 +169,7 @@ public class DefaultScreen {
         terrainPane.add(stackPane,j,i);
       }
     }
-    terrainMapView.setContent(terrainPane);
+    terrainMapView.getChildren().add(terrainPane);
   }
 
   @FXML
