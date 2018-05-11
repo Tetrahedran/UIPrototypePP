@@ -202,23 +202,25 @@ public class DefaultScreen {
 
   @FXML
   private void updateMap(){
-    Label label = (Label)((StackPane)currentRectangle.getParent()).getChildren().get(1);
-    int x = GridPane.getColumnIndex(currentRectangle.getParent());
-    int y = GridPane.getRowIndex(currentRectangle.getParent());
-    String costsString = costsTextField.getText();
-    try {
-      int costs = Integer.parseInt(costsString);
-      terrainMap.getMaterialAtPoint(new Coordinate(x, y)).setCosts(costs);
-      label.setText(costs > 0 ? costsString : "0");
-    }catch (Exception e){
-      errorLabel.setText("Invalid input in costs");
-      return;
+    if (currentRectangle != null) {
+      Label label = (Label) ((StackPane) currentRectangle.getParent()).getChildren().get(1);
+      int x = GridPane.getColumnIndex(currentRectangle.getParent());
+      int y = GridPane.getRowIndex(currentRectangle.getParent());
+      String costsString = costsTextField.getText();
+      try {
+        int costs = Integer.parseInt(costsString);
+        terrainMap.getMaterialAtPoint(new Coordinate(x, y)).setCosts(costs);
+        label.setText(costs > 0 ? costsString : "0");
+      } catch (Exception e) {
+        errorLabel.setText("Invalid input in costs");
+        return;
+      }
+      currentPointIsObstacle = obstacleCheckBox.isSelected();
+      if (currentPointIsObstacle) {
+        currentRectangle.setFill(Color.BLACK);
+      }
+      terrainMap.getMaterialAtPoint(new Coordinate(x, y)).setObstacle(currentPointIsObstacle);
     }
-    currentPointIsObstacle = obstacleCheckBox.isSelected();
-    if (currentPointIsObstacle){
-      currentRectangle.setFill(Color.BLACK);
-    }
-    terrainMap.getMaterialAtPoint(new Coordinate(x, y)).setObstacle(currentPointIsObstacle);
   }
 
   private Coordinate validCoordinate(String values){
