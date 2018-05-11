@@ -86,17 +86,19 @@ public class TerrainMap {
    */
   public TerrainMap addRadialGradient( Coordinate start) {
     TerrainMap out = new TerrainMap(0,0);
-    out.setCompleteMap(this.getCompleteMap());
+    Material[][] map =  new Material[this.getCompleteMap().length][this.getCompleteMap()[0].length];
 
-    for (int x = 0 ; x < out.getCompleteMap().length ; x++) {
-      for (int y = 0 ; y < out.getCompleteMap()[x].length ; y++) {
+    for (int x = 0 ; x < this.getCompleteMap().length ; x++) {
+      for (int y = 0 ; y < this.getCompleteMap()[x].length ; y++) {
         int distance = (int)Math.sqrt(Math.pow(start.getXvalue() - x,2)
-                + Math.pow(start.getYvalue() - y, 2));
-        Material mat = out.getMaterialAtPoint(new Coordinate(x,y));
+            + Math.pow(start.getYvalue() - y, 2));
+        Material oldMaterial = this.getMaterialAtPoint(new Coordinate(x,y));
+        Material mat = new Material(oldMaterial.getName(),oldMaterial.getCosts(),oldMaterial.isObstacle());
         mat.setCosts(mat.getCosts() * distance);
-        out.setMaterialAtPoint(new Coordinate(x,y), mat);
+        map[x][y] = mat;
       }
     }
+    out.setCompleteMap(map);
     return out;
   }
 
