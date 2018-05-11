@@ -47,6 +47,8 @@ public class DefaultScreen {
 
   private Pane pathPane;
 
+  private static final int REC_SIZE = 25;
+  private static final int GAP = 5;
 
   private int maxHeight;
   private int maxWidth;
@@ -81,6 +83,7 @@ public class DefaultScreen {
       option = Options.COSTS_AND_NUMBER_POINTS;
     }
     if (startingPoint != null && endingPoint != null && validIntermediatePoints){
+      Alert alert = new Alert(Alert.AlertType.ERROR);
       if (this.intermediatePoints.isEmpty()){
         try {
           path = pathFinder.getPath(terrainMap,startingPoint,endingPoint,option);
@@ -99,6 +102,10 @@ public class DefaultScreen {
       if(!path.isEmpty()) {
         printPath();
       }
+      else{
+        alert.setContentText("No Path found");
+        alert.show();
+      }
     }
     System.out.println(optionID);
   }
@@ -106,8 +113,8 @@ public class DefaultScreen {
   private void printPath(){
     pathPane.getChildren().removeAll(pathPane.getChildren());
     Coordinate start = path.poll();
-    int scaling = 31;
-    int padding = 13;
+    int scaling = REC_SIZE + GAP + 1;
+    int padding = REC_SIZE/2;
     for (Coordinate point : path) {
       Line line = new Line(padding+start.getXvalue()*scaling, padding+start.getYvalue()*scaling,
           padding+point.getXvalue()*scaling, padding+point.getYvalue()*scaling);
@@ -142,13 +149,13 @@ public class DefaultScreen {
   private void setUpDefaultTerrainMap(int height, int width){
     terrainMap = new TerrainMap(width, height);
     GridPane terrainPane = new GridPane();
-    terrainPane.setHgap(5);
-    terrainPane.setVgap(5);
+    terrainPane.setHgap(GAP);
+    terrainPane.setVgap(GAP);
     for (int i = 0; i < height; i++){
       for (int j = 0; j < width; j++){
         StackPane stackPane = new StackPane();
         Label label = new Label("1");
-        Rectangle rectangle = new Rectangle(25,25);
+        Rectangle rectangle = new Rectangle(REC_SIZE,REC_SIZE);
         rectangle.setStroke(Paint.valueOf("Black"));
         rectangle.setStrokeWidth(1);
         rectangle.setFill(Paint.valueOf("White"));
