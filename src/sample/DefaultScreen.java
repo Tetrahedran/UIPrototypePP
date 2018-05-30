@@ -56,7 +56,7 @@ public class DefaultScreen {
   private Rectangle currentRectangle;
   private TerrainMap terrainMap;
   private boolean currentPointIsObstacle;
-  private Queue<Coordinate> path;
+  private Queue<Coordinate> path = new LinkedList<>();
   private PathFinder pathFinder = new PathFinderAlgorithm();
 
   @FXML
@@ -83,19 +83,18 @@ public class DefaultScreen {
       option = Options.COSTS_AND_NUMBER_POINTS;
     }
     if (startingPoint != null && endingPoint != null && validIntermediatePoints){
-      Alert alert = new Alert(Alert.AlertType.ERROR);
       if (this.intermediatePoints.isEmpty()){
         try {
           path = pathFinder.getPath(terrainMap,startingPoint,endingPoint,option);
         } catch (Exception e) {
-          e.printStackTrace();
+          showAlert(e.getMessage());
         }
         System.out.println("NO INTERMEDIA");
       }else {
         try {
           path = pathFinder.getPath(terrainMap,startingPoint,endingPoint,intermediatePoints,option);
         } catch (Exception e) {
-          e.printStackTrace();
+          showAlert(e.getMessage());
         }
         System.out.println("WIth Intermedia");
       }
@@ -103,8 +102,7 @@ public class DefaultScreen {
         printPath();
       }
       else{
-        alert.setContentText("No Path found");
-        alert.show();
+        showAlert("No Path Found");
       }
     }
     System.out.println(optionID);
@@ -257,5 +255,13 @@ public class DefaultScreen {
     costsTextField.setText("" + material.getCosts());
     obstacleCheckBox.setSelected(material.isObstacle());
     currentPointIsObstacle = material.isObstacle();
+  }
+
+  private void showAlert(String message) {
+    Alert alert = new Alert(Alert.AlertType.ERROR);
+    alert.setTitle("Fehler");
+    alert.setHeaderText(null);
+    alert.setContentText(message);
+    alert.show();
   }
 }
