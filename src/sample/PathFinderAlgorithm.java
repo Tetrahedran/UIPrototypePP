@@ -33,9 +33,12 @@ public class PathFinderAlgorithm implements PathFinder {
           throws Exception {
     TerrainMap terrainMapTest = new TerrainMap(2,3);
     terrainMapTest.setCompleteMap(terrainMap.getCompleteMap());
-    if (terrainMapTest.getMaterialAtPoint(startingPoint).isObstacle()
-            || terrainMapTest.getMaterialAtPoint(endingPoint).isObstacle()) {
-      throw new Exception();
+
+    if (terrainMapTest.getMaterialAtPoint(startingPoint).isObstacle()) {
+      throw new Exception(startingPoint + " is obstacle");
+    }
+    else if (terrainMapTest.getMaterialAtPoint(endingPoint).isObstacle()) {
+      throw new Exception(endingPoint + " is obstacle");
     }
 
     if (option == Options.COSTS_AND_NUMBER_POINTS) {
