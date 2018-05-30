@@ -123,10 +123,10 @@ public class DefaultScreen {
     }
   }
 
-  public void setUpDefaultScreen(int height, int width){
+  public void setUpDefaultScreen(int height, int width, Stage stage){
     this.maxHeight = height;
     this.maxWidth = width;
-    Stage primaryStage = Main.primaryStage;
+    Stage primaryStage = stage;
     Parent root = null;
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("defaultScreen.fxml"));

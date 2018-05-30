@@ -3,6 +3,7 @@ package sample;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 public class EntryDialog {
 
@@ -26,7 +27,8 @@ public class EntryDialog {
       return;
     }
     if (height > 0 && width > 0) {
-      defaultScreen.setUpDefaultScreen(height,width);
+      Stage pS = (Stage) errorLabel.getScene().getWindow();
+      defaultScreen.setUpDefaultScreen(height,width, pS);
     }
     else{
       errorLabel.setText("Please type in numbers > 0");
